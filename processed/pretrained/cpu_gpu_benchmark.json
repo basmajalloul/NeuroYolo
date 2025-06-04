@@ -1,0 +1,4 @@
+{
+  "CPU_avg_inference_s": 0.054,
+  "GPU_avg_inference_s": 0.03
+}

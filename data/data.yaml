@@ -1,0 +1,10 @@
+path: data
+train: images/train
+val: images/val
+pose:
+  format: coco
+  annotation:
+    train: annotations_train.json
+    val: annotations_val.json
+nc: 1
+keypoints: 17
