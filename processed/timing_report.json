@@ -1,6 +1,6 @@
 {
-  "Keypoint Extraction (s)": 63.16,
-  "Keyframe Selection (s)": 0.18,
+  "Keypoint Extraction (s)": 282.56,
+  "Keyframe Selection (s)": 0.21,
   "Angle Computation (s)": 0.0,
-  "Video Generation (s)": 3.73
+  "Video Generation (s)": 4.18
 }

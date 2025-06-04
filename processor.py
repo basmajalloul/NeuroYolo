@@ -19,7 +19,7 @@ from sklearn.cluster import KMeans
 import time
 
 # Load YOLOv11 Pose Model
-model = YOLO('best.pt') 
+model = YOLO('NeuroYolo/best.pt') 
 
 def extract_keypoints(video_path, model, st_placeholder=None):
     cap = cv2.VideoCapture(video_path)
@@ -232,7 +232,7 @@ def select_keyframes_kmeans(keypoints_sequence, num_keyframes=10):
         distances = [np.linalg.norm(kp - center) for kp in flattened_kps]
         selected_indices.append(np.argmin(distances))
 
-    with open("processed/last_session_keyframes.json", "w") as f:
+    with open("NeuroYolo/processed/last_session_keyframes.json", "w") as f:
         json.dump([int(x) for x in sorted(selected_indices)], f)
 
     return sorted(selected_indices)
@@ -345,8 +345,8 @@ def estimate_pose_two_videos_resized(frame1, frame2, keypoints1, keypoints2, ALE
     except Exception as e:
         print(f"[ERROR] Failed to process frame: {e}")
 
-    os.makedirs("processed", exist_ok=True)
-    with open("processed/last_frame_angle_diff.json", "w") as f:
+    os.makedirs("NeuroYolo/processed", exist_ok=True)
+    with open("NeuroYolo/processed/last_frame_angle_diff.json", "w") as f:
         # Ensure all values are standard floats for JSON compatibility
         serializable_diff = {k: float(v) for k, v in frame_angle_diff.items()}
         json.dump(serializable_diff, f)
@@ -354,7 +354,7 @@ def estimate_pose_two_videos_resized(frame1, frame2, keypoints1, keypoints2, ALE
     return frame_angle_diff
 
 def generate_comparison_video_live_inference(coach_video_path, patient_video_path, 
-                                              keyframe_indices, output_path="processed/processed_video.mp4"):
+                                              keyframe_indices, output_path="NeuroYolo/processed/processed_video.mp4"):
     import cv2
     import numpy as np
     import json
@@ -363,7 +363,7 @@ def generate_comparison_video_live_inference(coach_video_path, patient_video_pat
     from ultralytics import YOLO
 
     # Load YOLO model
-    model = YOLO('best.pt')
+    model = YOLO('NeuroYolo/best.pt')
 
     coach_cap = cv2.VideoCapture(coach_video_path)
     patient_cap = cv2.VideoCapture(patient_video_path)
@@ -376,10 +376,10 @@ def generate_comparison_video_live_inference(coach_video_path, patient_video_pat
     adjusted_fps = int(fps * (len(keyframe_indices) / total_frames))
     adjusted_fps = max(1, adjusted_fps)
 
-    with open("processed/last_session_fps.json", "w") as f:
+    with open("NeuroYolo/processed/last_session_fps.json", "w") as f:
         json.dump({"fps": int(fps)}, f)
 
-    os.makedirs("processed", exist_ok=True)
+    os.makedirs("NeuroYolo/processed", exist_ok=True)
     out = cv2.VideoWriter(output_path, 
                           cv2.VideoWriter_fourcc(*'avc1'), 
                           adjusted_fps, 
@@ -438,11 +438,11 @@ def generate_comparison_video_live_inference(coach_video_path, patient_video_pat
     out.release()
 
     # After processing all frames, save similarity_trend to JSON
-    with open("processed/pose_similarity_trend.json", "w") as f:
+    with open("NeuroYolo/processed/pose_similarity_trend.json", "w") as f:
         json.dump([float(val) for val in similarity_trend], f)
 
     # Save event log
-    with open("processed/event_log.json", "w") as f:
+    with open("NeuroYolo/processed/event_log.json", "w") as f:
         json.dump(event_log, f)
 
     print(f"✅ Comparison video and event log generated at: {output_path}")
@@ -524,12 +524,12 @@ def plot_joint_deviation_heatmap(coach_keypoints_seq, patient_keypoints_seq):
     st.pyplot(plt)
 
 def save_keypoints_to_json(coach_kps, patient_kps):
-    os.makedirs("processed", exist_ok=True)
+    os.makedirs("NeuroYolo/processed", exist_ok=True)
 
-    with open("processed/last_session_coach.json", "w") as f:
+    with open("NeuroYolo/processed/last_session_coach.json", "w") as f:
         json.dump([kp.tolist() for kp in coach_kps], f)
 
-    with open("processed/last_session_participant.json", "w") as f:
+    with open("NeuroYolo/processed/last_session_participant.json", "w") as f:
         json.dump([kp.tolist() for kp in patient_kps], f)    
 
 def plot_joint_angle_deviation_bar(frame_angle_diff):
@@ -641,8 +641,8 @@ def calculate_movement_smoothness_index(joint_angle_sequence):
     return round(msi, 2)
 
 def save_msi(coach_msi, patient_msi):
-    os.makedirs("processed", exist_ok=True)
-    with open("processed/last_session_msi.json", "w") as f:
+    os.makedirs("NeuroYolo/processed", exist_ok=True)
+    with open("NeuroYolo/processed/last_session_msi.json", "w") as f:
         json.dump({
             "coach_msi": round(float(coach_msi), 2),
             "patient_msi": round(float(patient_msi), 2)
@@ -701,7 +701,7 @@ def save_frame_drop_stats(total_frames, selected_indices):
         "frame_drop_rate_percent": drop_rate,
         "skipped_indices": sorted(list(set(range(total_frames)) - set(selected_indices)))
     }
-    with open("processed/frame_drop_stats.json", "w") as f:
+    with open("NeuroYolo/processed/frame_drop_stats.json", "w") as f:
         json.dump(stats, f, indent=2)
 
 
@@ -728,5 +728,5 @@ def benchmark_yolo_inference_speed(model_path, video_path, device, n_frames=20):
 def save_cpu_gpu_benchmarks(model_path, video_path):
     cpu = benchmark_yolo_inference_speed(model_path, video_path, device="cpu", n_frames=20)
     gpu = benchmark_yolo_inference_speed(model_path, video_path, device=0, n_frames=20)
-    with open("processed/cpu_gpu_benchmark.json", "w") as f:
+    with open("NeuroYolo/processed/cpu_gpu_benchmark.json", "w") as f:
         json.dump({"CPU_avg_inference_s": cpu, "GPU_avg_inference_s": gpu}, f, indent=2)

@@ -13,13 +13,13 @@ import time
 import pandas as pd 
 import re 
 
-model = YOLO('best.pt') 
+model = YOLO('NeuroYolo/best.pt') 
 
 # Usage example:
-fine_tuned_size = get_model_size("best.pt")
-default_size = get_model_size("yolo11n-pose.pt")
+fine_tuned_size = get_model_size("NeuroYolo/best.pt")
+default_size = get_model_size("NeuroYolo/yolo11n-pose.pt")
 
-with open("processed/model_sizes.json", "w") as f:
+with open("NeuroYolo/processed/model_sizes.json", "w") as f:
     json.dump({
         "fine_tuned_model_MB": fine_tuned_size,
         "default_model_MB": default_size
@@ -35,7 +35,7 @@ page = st.sidebar.radio("Navigation", ["Home", "Upload & Analyze", "Results Dash
 # --- Page 1: Home ---
 if page == "Home":
     # Centered logo as the main header
-    svg_logo = open("assets/file.svg").read()
+    svg_logo = open("NeuroYolo/assets/file.svg").read()
     st.markdown(f"""
     <div style='text-align: center; margin-bottom: 0;'>
         <div style='text-align: center; width:120px; display:inline-block;'>{svg_logo}</div>
@@ -150,7 +150,7 @@ elif page == "Upload & Analyze":
         coach_msi = calculate_movement_smoothness_index(np.array(coach_angles))
         patient_msi = calculate_movement_smoothness_index(np.array(patient_angles))
 
-        with open("processed/msi_results.json", "w") as f:
+        with open("NeuroYolo/processed/msi_results.json", "w") as f:
             json.dump({
                 "coach_msi": float(coach_msi),
                 "patient_msi": float(patient_msi)
@@ -167,8 +167,8 @@ elif page == "Upload & Analyze":
         max_deviation, max_deviation_frame, max_deviation_joint = calculate_max_angle_deviation(coach_angles, patient_angles)
 
         # Save these into the results JSON
-        os.makedirs("processed", exist_ok=True)
-        with open("processed/last_results.json", "w") as f:
+        os.makedirs("NeuroYolo/processed", exist_ok=True)
+        with open("NeuroYolo/processed/last_results.json", "w") as f:
             json.dump({
                 "similarity": float(similarity),
                 "max_deviation": float(max_deviation),
@@ -189,12 +189,12 @@ elif page == "Upload & Analyze":
                 video1_path,
                 video2_path,
                 selected_indices,
-                output_path="processed/processed_video.mp4"
+                output_path="NeuroYolo/processed/processed_video.mp4"
             )
         timing_report["Video Generation (s)"] = round(time.time() - t3, 2)
 
         # --- Save timing_report as JSON ---
-        with open("processed/timing_report.json", "w") as f:
+        with open("NeuroYolo/processed/timing_report.json", "w") as f:
             json.dump(timing_report, f, indent=2)
 
         # Only show success after the video is fully generated
@@ -210,8 +210,8 @@ elif page == "Results Dashboard":
     st.markdown("Visual summary of detected anomalies and movement quality metrics.")
 
     # Load results JSON
-    if os.path.exists("processed/last_results.json") and os.path.getsize("processed/last_results.json") > 0:
-        with open("processed/last_results.json", "r") as f:
+    if os.path.exists("NeuroYolo/processed/last_results.json") and os.path.getsize("NeuroYolo/processed/last_results.json") > 0:
+        with open("NeuroYolo/processed/last_results.json", "r") as f:
             results = json.load(f)
     else:
         st.warning("No valid analysis results found. Please run the analysis first.")
@@ -291,16 +291,16 @@ elif page == "Results Dashboard":
 
     st.markdown(f"""<div style="background:#fff; height: 30px; width: 100%; display: block;"></div>""", unsafe_allow_html=True)
 
-    #st.write("Available files in processed/:", os.listdir("processed/"))
+    #st.write("Available files in processed/:", os.listdir("NeuroYolo/processed/"))
 
     st.subheader("Pose Comparison Playback")
 
-    if st.session_state.get("video_ready") or os.path.exists("processed/processed_video.mp4"):
+    if st.session_state.get("video_ready") or os.path.exists("NeuroYolo/processed/processed_video.mp4"):
         # Display the video
-        with open("processed/processed_video.mp4", "rb") as video_file:
+        with open("NeuroYolo/processed/processed_video.mp4", "rb") as video_file:
             st.video(video_file.read())
 
-        with open("processed/event_log.json", "r") as f:
+        with open("NeuroYolo/processed/event_log.json", "r") as f:
             event_log = json.load(f)
 
         def parse_event(event):
@@ -372,9 +372,9 @@ elif page == "Reports":
 
     def load_last_session_keypoints():
         try:
-            with open("processed/last_session_coach.json", "r") as f:
+            with open("NeuroYolo/processed/last_session_coach.json", "r") as f:
                 coach_kps = [np.array(kp) for kp in json.load(f)]
-            with open("processed/last_session_participant.json", "r") as f:
+            with open("NeuroYolo/processed/last_session_participant.json", "r") as f:
                 patient_kps = [np.array(kp) for kp in json.load(f)]
             return coach_kps, patient_kps
         except FileNotFoundError:
@@ -386,14 +386,14 @@ elif page == "Reports":
         visualize_dtw_alignment(coach_kps, patient_kps)
 
         # Assuming you saved the last frame's angle deviations as JSON:
-        with open("processed/last_frame_angle_diff.json", "r") as f:
+        with open("NeuroYolo/processed/last_frame_angle_diff.json", "r") as f:
             frame_angle_diff = json.load(f)
 
         plot_joint_angle_deviation_bar(frame_angle_diff)
         plot_joint_angle_deviation_heatmap(frame_angle_diff)  # New heatmap plot
 
-        if os.path.exists("processed/msi_results.json"):
-            with open("processed/msi_results.json", "r") as f:
+        if os.path.exists("NeuroYolo/processed/msi_results.json"):
+            with open("NeuroYolo/processed/msi_results.json", "r") as f:
                 msi_results = json.load(f)
             
             st.subheader("Movement Smoothness Index (MSI)")
@@ -419,25 +419,25 @@ elif page == "Reports":
             st.info("MSI results not found. Please run the analysis first.")
 
         
-        if os.path.exists("processed/pose_similarity_trend.json") and \
-        os.path.exists("processed/last_session_keyframes.json") and \
-        os.path.exists("processed/last_session_fps.json"):
+        if os.path.exists("NeuroYolo/processed/pose_similarity_trend.json") and \
+        os.path.exists("NeuroYolo/processed/last_session_keyframes.json") and \
+        os.path.exists("NeuroYolo/processed/last_session_fps.json"):
 
-            with open("processed/pose_similarity_trend.json", "r") as f:
+            with open("NeuroYolo/processed/pose_similarity_trend.json", "r") as f:
                 similarity_scores = json.load(f)
-            with open("processed/last_session_keyframes.json", "r") as f:
+            with open("NeuroYolo/processed/last_session_keyframes.json", "r") as f:
                 keyframe_indices = json.load(f)
-            with open("processed/last_session_fps.json", "r") as f:
+            with open("NeuroYolo/processed/last_session_fps.json", "r") as f:
                 original_fps = json.load(f)["fps"]
 
             plot_cumulative_error(similarity_scores, keyframe_indices, original_fps)
         else:
             st.warning("Required data for cumulative error plot is missing. Please run the analysis first.")
 
-        if os.path.exists("processed/pose_similarity_trend.json") and os.path.exists("processed/last_session_fps.json"):
-            with open("processed/pose_similarity_trend.json", "r") as f:
+        if os.path.exists("NeuroYolo/processed/pose_similarity_trend.json") and os.path.exists("NeuroYolo/processed/last_session_fps.json"):
+            with open("NeuroYolo/processed/pose_similarity_trend.json", "r") as f:
                 similarity_scores = json.load(f)
-            with open("processed/last_session_fps.json", "r") as f:
+            with open("NeuroYolo/processed/last_session_fps.json", "r") as f:
                 dynamic_fps = json.load(f).get("fps", 25)
 
             plot_pose_similarity_trend(similarity_scores, keyframe_indices, original_fps)
