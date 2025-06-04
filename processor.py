@@ -446,7 +446,7 @@ def generate_comparison_video_live_inference(coach_video_path, patient_video_pat
         json.dump(event_log, f)
 
     print(f"✅ Comparison video and event log generated at: {output_path}")
-
+    
 @st.cache_data(show_spinner=True)
 def compute_dtw_alignment_cached(coach_keypoints_seq, patient_keypoints_seq):
     from dtw import dtw
@@ -458,15 +458,13 @@ def compute_dtw_alignment_cached(coach_keypoints_seq, patient_keypoints_seq):
     coach_array = np.array(coach_flattened)
     patient_array = np.array(patient_flattened)
 
-    print("coach_array shape:", coach_array.shape)
-    print("patient_array shape:", patient_array.shape)
-
-
-    alignment = dtw(coach_array, patient_array, dist=lambda x, y: np.linalg.norm(x - y))
+    # DTW using default metric (Euclidean)
+    alignment = dtw(coach_array, patient_array, keep_internals=True)
     dist = alignment.distance
     path = (alignment.index1, alignment.index2)
 
     return coach_array, patient_array, path
+
 
 def visualize_dtw_alignment(coach_keypoints_seq, patient_keypoints_seq):
     # Flatten keypoints for each frame (if not already arrays)
