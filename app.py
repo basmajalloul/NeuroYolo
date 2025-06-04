@@ -30,7 +30,33 @@ st.set_page_config(page_title="NeuroYolo Dashboard", layout="wide")
 
 # --- Sidebar Navigation ---
 st.sidebar.title("NeuroYolo Dashboard")
-page = st.sidebar.radio("Navigation", ["Home", "Upload & Analyze", "Results Dashboard", "Reports"])
+
+st.sidebar.markdown(
+    """
+    <div style="background: linear-gradient(90deg, #10d6d3 0%, #a34fff 100%);
+                border-radius: 8px;
+                padding: 14px 18px 10px 18px;
+                margin-bottom: 18px;
+                display: flex;
+                align-items: center;">
+        <span style="color: #fff; font-size: 1.17em; font-weight: 600;">
+            NeuroYolo<br>
+            <span style="font-size: 0.92em; font-weight: 400; color: #f3f3f3;">AI Pose Analytics</span>
+        </span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.sidebar.markdown(
+    """
+    <div style="background: #f1f5fa; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px;">
+        <span style="color: #10d6d3; font-weight: 500;">💡 Tip:</span> Explore demo results in the <b>Results Dashboard</b> and <b>Reports</b>!
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # --- Page 1: Home ---
 if page == "Home":
