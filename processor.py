@@ -458,9 +458,11 @@ def compute_dtw_alignment_cached(coach_keypoints_seq, patient_keypoints_seq):
     coach_array = np.array(coach_flattened)
     patient_array = np.array(patient_flattened)
 
-    dist, cost, acc_cost, path = dtw(coach_array, patient_array, dist=lambda x, y: np.linalg.norm(x - y))
+    alignment = dtw(coach_array, patient_array, dist=lambda x, y: np.linalg.norm(x - y))
+    dist = alignment.distance
+    path = (alignment.index1, alignment.index2)
 
-    return coach_array, patient_array, path   
+    return coach_array, patient_array, path
 
 def visualize_dtw_alignment(coach_keypoints_seq, patient_keypoints_seq):
     # Flatten keypoints for each frame (if not already arrays)
