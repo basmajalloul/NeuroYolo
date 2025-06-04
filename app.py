@@ -73,6 +73,18 @@ if page == "Home":
         unsafe_allow_html=True
     )
 
+    st.markdown(
+        """
+        <div style="background-color: #e1f7ef; border-radius: 8px; padding: 16px; margin-bottom: 1em;">
+        <b>💡 Demo Data Preloaded:</b> For first-time visitors, sample results are already preloaded in <b>Results Dashboard</b> and <b>Reports</b>.
+        <br>
+        Explore these sections without uploading data to quickly preview the platform's capabilities!
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
     st.markdown("---")
     st.success("Ready to get started? Use the sidebar to upload your videos and run your first analysis!")
 
