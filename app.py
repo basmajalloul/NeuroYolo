@@ -84,10 +84,22 @@ if page == "Home":
         unsafe_allow_html=True
     )
 
-
-    st.markdown("---")
-    st.success("Ready to get started? Use the sidebar to upload your videos and run your first analysis!")
-
+    st.markdown(
+    """
+    <div style="background: linear-gradient(90deg, #10d6d3 0%, #a34fff 100%); 
+                color: #fff; 
+                border-radius: 8px; 
+                padding: 18px 20px; 
+                font-size: 1.12em; 
+                font-weight: 600; 
+                margin-top: 10px; 
+                box-shadow: 0 2px 12px #10d6d330;">
+        <span style="font-size: 1.3em; vertical-align: middle; margin-right: 8px;">🚀</span>
+        Ready to get started? Use the sidebar to upload your videos and run your first analysis!
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
 
 # --- Page 2: Upload & Analyze ---
 elif page == "Upload & Analyze":
