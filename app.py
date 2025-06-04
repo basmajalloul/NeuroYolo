@@ -29,14 +29,7 @@ with open("processed/model_sizes.json", "w") as f:
 st.set_page_config(page_title="NeuroYolo Dashboard", layout="wide")
 
 # --- Sidebar Navigation ---
-st.sidebar.markdown(
-    """
-    <div style="background: #f1f5fa; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px;">
-        <span style="color: #10d6d3; font-weight: 500;">💡 Tip:</span> Explore demo results in the <b>Results Dashboard</b> and <b>Reports</b>!
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.sidebar.title("NeuroYolo Dashboard")
 page = st.sidebar.radio("Navigation", ["Home", "Upload & Analyze", "Results Dashboard", "Reports"])
 
 # --- Page 1: Home ---
@@ -55,14 +48,12 @@ if page == "Home":
     # Main features and how-to section as before
     st.markdown(
         """
-        <div style="background-color: #f1f5fa; border-radius: 8px; padding: 20px; margin: 2em 0 1em 0;">
         <b>What is NeuroYolo?</b><br>
         <ul>
             <li>🔬 <b>Real-time pose analytics</b> for rehabilitation and movement science</li>
             <li>💡 <b>Automated, per-joint anomaly detection</b> with interactive event logs</li>
             <li>📈 <b>Exportable clinical reports</b> and time-series analytics</li>
         </ul>
-        </div>
         """,
         unsafe_allow_html=True
     )
