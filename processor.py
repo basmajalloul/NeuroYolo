@@ -458,6 +458,10 @@ def compute_dtw_alignment_cached(coach_keypoints_seq, patient_keypoints_seq):
     coach_array = np.array(coach_flattened)
     patient_array = np.array(patient_flattened)
 
+    print("coach_array shape:", coach_array.shape)
+    print("patient_array shape:", patient_array.shape)
+
+
     alignment = dtw(coach_array, patient_array, dist=lambda x, y: np.linalg.norm(x - y))
     dist = alignment.distance
     path = (alignment.index1, alignment.index2)
