@@ -129,7 +129,7 @@ pip install -r requirements.txt
 
 If you use this framework, please cite:
 
-> [Include BibTeX entry or manuscript reference once published.]
+> [BibTeX entry or manuscript reference once published.]
 
 ---
 
