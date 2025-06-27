@@ -1,4 +1,4 @@
-# NeuroYOLO)- Pipeline
+# NeuroYOLO - Pipeline
 
 This repository provides a complete workflow for building and deploying a **video-based human pose analysis platform** using YOLOv11n-pose.  
 It includes scripts for keyframe extraction and annotation, dataset preparation, model fine-tuning, and a fully-featured Streamlit dashboard for real-time pose analysis in rehabilitation and movement science.
