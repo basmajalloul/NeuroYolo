@@ -1,0 +1,11 @@
+name: keep-neuroyolo-awake
+on:
+  schedule:
+    - cron: "0 */2 * * *"  
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl app
+        run: |
+          curl -I --max-time 20 "https://neuroyolo.streamlit.app/?embed=true" || true
